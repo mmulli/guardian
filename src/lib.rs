@@ -38,7 +38,7 @@ use std::sync;
 ///
 /// The data protected by the mutex can be access through this guard via its `Deref` and `DerefMut`
 /// implementations.
-pub struct ArcRwLockReadGuardian<T: 'static> {
+pub struct ArcRwLockReadGuardian<T: 'static + ?Sized> {
     _handle: sync::Arc<sync::RwLock<T>>,
     inner: Option<sync::RwLockReadGuard<'static, T>>,
 }
@@ -48,7 +48,7 @@ pub struct ArcRwLockReadGuardian<T: 'static> {
 ///
 /// The data protected by the mutex can be access through this guard via its `Deref` and `DerefMut`
 /// implementations.
-pub struct ArcRwLockWriteGuardian<T: 'static> {
+pub struct ArcRwLockWriteGuardian<T: 'static + ?Sized> {
     _handle: sync::Arc<sync::RwLock<T>>,
     inner: Option<sync::RwLockWriteGuard<'static, T>>,
 }
@@ -59,7 +59,7 @@ pub struct ArcRwLockWriteGuardian<T: 'static> {
 ///
 /// The data protected by the mutex can be access through this guard via its `Deref` and `DerefMut`
 /// implementations.
-pub struct ArcMutexGuardian<T: 'static> {
+pub struct ArcMutexGuardian<T: 'static + ?Sized> {
     _handle: sync::Arc<sync::Mutex<T>>,
     inner: Option<sync::MutexGuard<'static, T>>,
 }
@@ -69,7 +69,7 @@ pub struct ArcMutexGuardian<T: 'static> {
 ///
 /// The data protected by the mutex can be access through this guard via its `Deref` and `DerefMut`
 /// implementations.
-pub struct RcRwLockReadGuardian<T: 'static> {
+pub struct RcRwLockReadGuardian<T: 'static + ?Sized> {
     _handle: rc::Rc<sync::RwLock<T>>,
     inner: Option<sync::RwLockReadGuard<'static, T>>,
 }
@@ -79,7 +79,7 @@ pub struct RcRwLockReadGuardian<T: 'static> {
 ///
 /// The data protected by the mutex can be access through this guard via its `Deref` and `DerefMut`
 /// implementations.
-pub struct RcRwLockWriteGuardian<T: 'static> {
+pub struct RcRwLockWriteGuardian<T: 'static + ?Sized> {
     _handle: rc::Rc<sync::RwLock<T>>,
     inner: Option<sync::RwLockWriteGuard<'static, T>>,
 }
@@ -90,7 +90,7 @@ pub struct RcRwLockWriteGuardian<T: 'static> {
 ///
 /// The data protected by the mutex can be access through this guard via its `Deref` and `DerefMut`
 /// implementations.
-pub struct RcMutexGuardian<T: 'static> {
+pub struct RcMutexGuardian<T: 'static + ?Sized> {
     _handle: rc::Rc<sync::Mutex<T>>,
     inner: Option<sync::MutexGuard<'static, T>>,
 }
@@ -375,37 +375,37 @@ impl<T> RcMutexGuardian<T> {
 // Drop
 // ****************************************************************************
 
-impl<T> Drop for ArcRwLockReadGuardian<T> {
+impl<T: ?Sized> Drop for ArcRwLockReadGuardian<T> {
     fn drop(&mut self) {
         self.inner.take();
     }
 }
 
-impl<T> Drop for ArcRwLockWriteGuardian<T> {
+impl<T: ?Sized> Drop for ArcRwLockWriteGuardian<T> {
     fn drop(&mut self) {
         self.inner.take();
     }
 }
 
-impl<T> Drop for ArcMutexGuardian<T> {
+impl<T: ?Sized> Drop for ArcMutexGuardian<T> {
     fn drop(&mut self) {
         self.inner.take();
     }
 }
 
-impl<T> Drop for RcRwLockReadGuardian<T> {
+impl<T: ?Sized> Drop for RcRwLockReadGuardian<T> {
     fn drop(&mut self) {
         self.inner.take();
     }
 }
 
-impl<T> Drop for RcRwLockWriteGuardian<T> {
+impl<T: ?Sized> Drop for RcRwLockWriteGuardian<T> {
     fn drop(&mut self) {
         self.inner.take();
     }
 }
 
-impl<T> Drop for RcMutexGuardian<T> {
+impl<T: ?Sized> Drop for RcMutexGuardian<T> {
     fn drop(&mut self) {
         self.inner.take();
     }
